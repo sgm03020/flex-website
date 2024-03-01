@@ -1,0 +1,290 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+//
+// The variables you want to modify
+// $font-size-root: 20px;
+
+// 必要な対応
+// 1.  bootstrapのh2, display-4などの対応
+// 2.  bootstrapのgrid breakpointに合わせる処理を入れた
+//     ただし、普通にsmを入れると、sm -> xl -> lg -> md の優先順位になってしまう。
+// これはvuetifyの$container-max-widthsの定義にsmが入っていないことが原因に見える
+// vuetifyのソース内の_variables.scssの$container-max-widths定義にsmを加えると
+// cssのクラスの生成結果が
+// md -> lg -> xl -> sm の順になり、smが最優先になってしまう
+// 方法2-1のようにbootstrapのソースから必要な部分を抜き出し、それを使えば
+// ちゃんとxl -> lg -> md -> sm の順になる
+// または、vuetifyのVGridにある_mixins.sassのmake-container-max-widths()
+// を使い再定義してもOKだった
+
+// 1. の実装
+//   bootstrap形式の変数(一部にbt-を付加)をbootstrap-variablesに定義
+//   その際、vuetifyのstyles.sassとバッティングしないように一部変数の名前を変更した
+
+// 2. の実装
+
+// 方法 2-1. (bootstrapのコードを使う)
+// bootstrapをデバッグしてmax-widthを決める部分のコードを移植する
+// ~assets/styles/breakpoints(_breakpoints.scss)へ$grid-breakpointsや
+// $container-max-widthの値を記述。これを読み込み変数を上書きする
+// また、@mixin make-container-max-widths を移植して、
+// .container {max-width:xxx} を生成する。
+
+// 方法2. (smは諦める)
+// bootstrapのソースは使わず、smを除いて$grid-breakpointsや$container-max-widths
+// をこのvariables.scssに書くだけとしてsmに関するmax-widthは実装しない
+// smを入れた場合、以下のようになってしまう
+// 720px -> 960px -> 1140px -> 540px
+// 期待する結果
+// 540px -> 720px -> 960px -> 1140px
+
+// 方法3. (2-1と似ているがvuetifyのmixinをそのまま使う)　これ採用中
+// bootstrapのソースは使わず、$grid-breakpointsや$container-max-widths
+// をこのvariables.scssに書く
+// vietify定義のmake-container-max-widthsを使い、.container{ max-width: xxx}
+// を作る。そのため、~vuetify/src/components/VGrid/_mixins.sassをinclude
+// node_module下から作られたsmは上に来るが、
+// この場所でmake-container-max-widthsから作るとちゃんとした順番になる
+// 540px -> 720px -> 960px -> 1140px
+// .containerではなく、.max-containerにしても良いかもしれない
+
+
+@import '~assets/styles/bootstrap-variables';
+// @debug $container-max-widths;
+
+// $grid-breakpoints = { xs: 0 sm: 576px md: 768px lg: 992px xl: 1200px };
+// @import '~vuetify/src/styles/styles.sass';
+// make-container-max-widthsおよびmedia-breakpoint-upを利用するために以下
+@import '~vuetify/src/styles/tools/_index.sass';
+@import '~vuetify/src/components/VGrid/_mixins.sass';
+
+// サンプルでは
+// md は (min-width: 768px) となっている
+// lg    (min-width: 992px)
+// 以下は devで動作させる場合、treeShake:trueが必要
+// https://qiita.com/jzx100ts/items/b13fcd328e1cdecfe774
+// xs: 0,
+// sm: 420px,
+// md: 840px,
+// lg: 1260px,
+// xl: 1680px
+// bootstrap標準
+// breakpoint-next(sm, (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px)
+// 以下の設定はplugin下にも書く
+// $grid-breakpoints: map-merge($grid-breakpoints, (
+//     xs: 0,
+//     sm: 576px,
+//     md: 768px,
+//     lg: 992px,
+//     xl: 1200px,
+// ));
+//
+// vuetifyのcontainer-max-widthsには md, lg, xlしか定義されていないようだ
+// (smを追加しても有効にはならなかった)
+
+// vuetifyにもmake-container-max-widthsが定義されているようだ
+@if (mixin-exists('make-container-max-widths')) {
+}
+// 順番を変えたりしても結局smが最後に来る
+// $container-max-widths: ();
+// $container-max-widths: (
+//   'xs': 200px,
+//   'sm': 210px,
+//   'md': 220px,
+//   'lg': 230px,
+//   'xl': 240px,
+// );
+// $container-max-widths: (); -> 効果なし
+// $container-max-widths: map-merge(
+//   $container-max-widths,
+//   (
+//     'xs': 200px,
+//     'sm': 210px,
+//     'md': 220px,
+//     'lg': 230px,
+//     'xl': 240px,
+//   )
+// );
+
+// vuetifyのみの定義を使う場合には
+// smがあると、出来上がったcssの上になってしまう
+// 元ソースのsettings/_variables.scssにsmを加えればよいが
+// $container-max-widths: map-deep-merge(
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px
+);
+$grid-breakpoints: (
+  // xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px
+);
+// $container-max-widths: (
+//   (
+//     'sm': 210px,
+//     'md': 220px,
+//     'lg': 230px,
+//     'xl': 240px,
+//   )
+// );
+
+// @debug '-start-';
+// @each $breakpoint in $grid-breakpoints {
+//   @debug $breakpoint;
+//   .test {
+//     max-width: $breakpoint
+//   }
+// };
+// @debug '-end-';
+
+// 2-3
+// .containter {
+//   @include make-container-max-widths()
+// }
+
+
+// bootstrapと同様なbreakpointを使う場合は以下を有効にする
+// vuetifyのstyles.sassのbreakpoints
+// $container-max-widths
+// $grid-breakpoints
+// を上書きする
+// @import '~assets/styles/breakpoints';
+// @debug $grid-breakpoints;
+
+// 直接書く場合
+// $container-max-widths: (
+//   (
+//     'sm': 540px,
+//     'md': 720px,
+//     'lg': 960px,
+//     'xl': 1140px,
+//   )
+// );
+// $grid-breakpoints: (
+//   xs: 0,
+//   sm: 576px,
+//   md: 768px,
+//   lg: 992px,
+//   xl: 1200px,
+// );
+
+// 直書き方式(うまく行かない)
+// @media (min-width: 1200px) {
+//   .container {
+//     max-width: 1140px;
+//   }
+// }
+// @media (min-width: 992px) {
+//   .container {
+//     max-width: 960px;
+//   }
+// }
+// @media (min-width: 768px) {
+//   .container {
+//     max-width: 720px;
+//   }
+// }
+// @media (min-width: 576px) {
+//   .container {
+//     max-width: 540px;
+//   }
+// }
+
+// 以下smのために追加
+// @media #{map-get($display-breakpoints, 'sm-only')} {
+// @media (min-width: map-get($grid-breakpoints, 'sm')) {
+//   .container {
+//     max-width: 540px;
+//   }
+// }
+
+// 結果
+// ここから
+// media (min-width: 768px)
+// .container {
+//     max-width: 900px;
+// }
+// @media (min-width: 992px)
+// .container {
+//     max-width: 1185px;
+// }
+// @media (min-width: 1200px)
+// .container {
+//     max-width: 1785px;
+// }
+// ここまで
+
+// $container-max-widths: (
+//   // 'xs': 540,
+//   'sm': 540px,
+//   'md': 720px,
+//   'lg': 960px,
+//   'xl': 1140px,
+// );
+
+// $container-max-widths: map-deep-merge(
+//   (
+//     'sm': map-get($grid-breakpoints, 'sm') * 0.9375,
+//     'md': map-get($grid-breakpoints, 'md') * 0.9375,
+//     'lg': map-get($grid-breakpoints, 'lg') * 0.9375,
+//     'xl': map-get($grid-breakpoints, 'xl') * 0.9375
+//   ),
+//   $container-max-widths
+// );
+// $container-max-widths: map-deep-merge(
+//   (
+//     'xs': 540,
+//     'sm': 540,
+//     'md': 720,
+//     'lg': 960,
+//     'xl': 1140,
+//   ),
+//   $container-max-widths
+// );
+
+// @debug map-get($grid-breakpoints, 'md');
+// @debug $container-max-widths;
+
+// @media only screen and (min-width: map-get($grid-breakpoints, 'sm')) {
+//   .container {
+//     max-width: 540px !important;
+//   }
+// }
+
+// @media only screen and (min-width: map-get($grid-breakpoints, 'md')) {
+//   .container {
+//     max-width: 768px !important;
+//   }
+// }
+
+// 予約ページカレンダーの罫線の色
+// $border-color: orange;
+
+// 別のフォントを使いたい場合
+
+// $body-font-family: serif;
+$body-font-family: 'Arial', sans-serif;
+
+// $body-font-family: 'M PLUS 1p', inter, sans-serif;
+// $body-font-family: 'Sawarabi Gothic', inter, sans-serif;
+
+// 'Noto Sans JP', Inter, sans-serif;
+// $body-font-family: 'Noto Sans JP', sans-serif;
+
+/*
+$body-font-family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto',
+  'Helvetica Neue', 'Arial', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+  'Segoe UI Symbol', 'Noto Color Emoji';
+
+$body-font-family1: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN',
+  'Noto Sans Japanese', 'Meiryo', 'Yu Gothic Medium', sans-serif;
+
+$body-font-family2: 'Times New Roman';
+*/
+
+// $body-font-family: serif;
+
+// @import '~vuetify/src/styles/styles.sass';

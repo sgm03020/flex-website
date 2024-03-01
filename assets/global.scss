@@ -1,0 +1,205 @@
+/* ここにfont-familyを書くだけではダメ */
+
+/* 1) variables.scssの方へ$body-font-family1を定義
+   2) nuxt.config.jsでvuetifyのデフォルトfontをfalseへ
+      vuetify: {
+        defaultAssets: {
+        icons: false,
+        font: false,
+      },
+   3)  .v-application .v-application--wrapの書き方は
+       https://stackoverflow.com/questions/63086103/how-can-i-change-the-font-for-all-items-in-vuetify-from-roboto-to-another
+*/
+
+/*
+  text-h5 などvuetifyのクラスを指定した場合には font-family: 'Roboto' !important
+  になったままであり、これに対処するには
+  https://kamoqq.info/post/how-to-change-vuetify2-default-font/
+  https://github.com/vuetifyjs/vuetify/issues/8169
+  variables.scssへ追加
+
+  $body-font-family: serif;
+  @import "~vuetify/src/styles/styles.sass";
+
+  この状態でglobal.scssなどを作成してある場合は
+  そちらに
+  .v-application .v-application--wrap * {
+    font-family: $body-font-family !important;
+  }
+  などとしておく
+*/
+
+/* 以下 OK */
+
+// .v-application {
+//   font-family: $body-font-family !important;
+//   font-feature-settings: 'palt';
+// }
+
+// @debug 'global.scss:' $grid-breakpoints;
+// .max-container {
+//   @include make-container-max-widths();
+// }
+
+.v-application {
+  font-family: $body-font-family !important;
+  font-feature-settings: 'palt';
+
+  //
+  // bootstrapカラー移植
+  //   同じクラスをbootstrapのvariablesの変数を使って定義する
+  //   text-primary, text-danger等
+  //
+  .text-primary {
+    color: $bt-primary;
+  }
+  .text-danger {
+    color: $bt-danger;
+  }
+  .text-warning {
+    color: $bt-warning;
+  }
+  .text-light {
+    color: $bt-light;
+  }
+  .text-dark {
+    color: $bt-dark;
+  }
+  .text-muted {
+    color: $bt-gray-600;
+  }
+  .text-test {
+    color: $bt-danger;
+  }
+  // bg-light, bg-dark漏れ(bootstrapにはutilitiesに関数定義されている)
+  // 他のbg-xxxxは_layout.scssに直接書かれている
+  .bg-light {
+    background-color: $bt-light;
+  }
+  .bg-dark {
+    background-color: $bt-dark;
+  }
+  .bg-secondary {
+    background-color: $bt-secondary;
+  }
+  //
+  // bootstrapのfont size移植
+  //
+  // $display1-size:               6rem !default;
+  // $display2-size:               5.5rem !default;
+  // $display3-size:               4.5rem !default;
+  // $display4-size:               3.5rem !default;
+  .display-1 {
+    font-size: $display1-size !important; // 6rem
+    font-weight: $display1-weight;
+    line-height: $display-line-height;
+  }
+  .display-2 {
+    font-size: $display2-size !important; // 5.5rem
+    font-weight: $display2-weight;
+    line-height: $display-line-height;
+  }
+  .display-3 {
+    font-size: $display3-size !important; // 4.5rem
+    font-weight: $display3-weight;
+    line-height: $display-line-height;
+  }
+  .display-4 {
+    font-size: $display4-size !important; // 3.5rem
+    font-weight: $display4-weight;
+    line-height: $display-line-height;
+  }
+  /* prettier-ignore */
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    margin-bottom: $headings-margin-bottom;
+    font-family: $body-font-family;
+    font-weight: $headings-font-weight;
+    line-height: $headings-line-height;
+  }
+  /* prettier-ignore */
+  h1, .h1 {
+    font-size: $h1-font-size;
+  }
+  /* prettier-ignore */
+  h2, .h2 {
+    font-size: $h2-font-size;
+  }
+  /* prettier-ignore */
+  h3, .h3 {
+    font-size: $h3-font-size;
+  }
+  /* prettier-ignore */
+  h4, .h4 {
+    font-size: $h4-font-size;
+    font-weight: 500;
+  }
+  /* prettier-ignore */
+  h5, .h5 {
+    font-size: $h5-font-size;
+  }
+  /* prettier-ignore */
+  h6, .h6 {
+    font-size: $h6-font-size;
+  }
+  /* prettier-ignore */
+  .small {
+    font-size: 80%;
+    font-weight: 400;
+  }
+  /* prettier-ignore */
+  .small-90 {
+    font-size: 90%;
+    font-weight: 400;
+  }
+  // h6が1rem
+  // h7からは独自定義
+  /* prettier-ignore */
+  .h7, .h8, .h9, .h10, .h11, .h12 {
+    margin-bottom: $headings-margin-bottom;
+    font-family: $body-font-family;
+    font-weight: $headings-font-weight;
+    line-height: $headings-line-height;
+  }
+  /* prettier-ignore */
+  .h7 {
+    font-size: 0.9rem;
+  }
+  /* prettier-ignore */
+  .h8 {
+    font-size: 0.8rem;
+  }
+
+  //
+  // containerのmax-width設定
+  // variables.scssにて_breakpoints.scssがインポートされたか、
+  // あるいは、vuetifyの_mixins.sassがインポートされた場合を想定
+  // それにより、mixinのmake-container-max-widthsが存在することになる
+  //
+  @if mixin-exists(make-container-max-widths) {
+    // 1) .max-containerを使う場合
+    // .max-container {
+    //   @include make-container-max-widths();
+
+    //   margin-left: auto !important;
+    //   margin-right: auto !important;
+    // }
+
+    // 2) 既存の.containerを利用する場合
+    //    .containerは付くが、.container--fluidが付かない場合
+    .container:not(.container--fluid) {
+      // .container {
+      // @include make-container-max-widths($container-max-widths, $grid-breakpoints);
+      @include make-container-max-widths();
+      // !importを付ける場合には生で記述(元は_mixins.sass)
+      // @each $breakpoint, $container-max-width in $container-max-widths {
+      //   @include media-breakpoint-up($breakpoint, $grid-breakpoints) {
+      //     max-width: $container-max-width !important;
+      //   }
+      // }
+
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+  }
+}

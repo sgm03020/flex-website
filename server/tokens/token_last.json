@@ -1,0 +1,7 @@
+{
+  "access_token": "ya29.a0AfH6SMA4ipLt79sPfdcfoawp03TVOnyH0R2GGPCsi7rqW5HRiEp4BHA-9C0MPIki_EYNQ8wRyh3AwQQE19GEQ0xtr4u8xRrQe9yeIlpjUsidJURVs97iM2Gyc7R_CsF61m09ZAb8Rv6NkLYROc79i0MFsj9QJKEA0W9QGSaaY1g",
+  "refresh_token": "1//0e-8IiGg5J-b1CgYIARAAGA4SNwF-L9Irmvhiv6t0-E0PT2UHcOds5fiqXRKek_2I3z4F_lnVLXfa7AJpa6oWqR7wS7JhODEiwtY",
+  "scope": "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar/events",
+  "token_type": "Bearer",
+  "expiry_date": 1609301782405
+}

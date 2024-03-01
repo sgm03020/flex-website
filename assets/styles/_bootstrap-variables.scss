@@ -1,0 +1,187 @@
+// 以下が元情報
+// \node_modules\bootstrap\scss\_variables.scss"
+//
+
+// 以下vuetifyとconflictするためコメント
+// @import "~bootstrap/scss/functions";
+// @import "~bootstrap/scss/variables";
+
+// 直接定義する(元は~bootstrap/scss/variables)
+$bt-spacer: 1rem !default;
+$font-size-base:              1rem !default; // Assumes the browser default, typically `16px`
+$font-weight-lighter:         lighter !default;
+$font-weight-light:           300 !default;
+$font-weight-normal:          400 !default;
+$font-weight-bold:            700 !default;
+$font-weight-bolder:          bolder !default;
+
+$font-weight-base:            $font-weight-normal !default;
+$line-height-base:            1.5 !default;
+
+$h1-font-size:                $font-size-base * 2.5 !default;
+$h2-font-size:                $font-size-base * 2 !default;
+$h3-font-size:                $font-size-base * 1.75 !default;
+$h4-font-size:                $font-size-base * 1.5 !default;
+$h5-font-size:                $font-size-base * 1.25 !default;
+$h6-font-size:                $font-size-base !default;
+
+$headings-margin-bottom:      $bt-spacer / 2 !default;
+$headings-font-weight:        500 !default;
+$headings-line-height:        1.2 !default;
+
+$display1-size:               6rem !default;
+$display2-size:               5.5rem !default;
+$display3-size:               4.5rem !default;
+$display4-size:               3.5rem !default;
+
+$display1-weight:             300 !default;
+$display2-weight:             300 !default;
+$display3-weight:             300 !default;
+$display4-weight:             300 !default;
+$display-line-height:         $headings-line-height !default;
+
+$lead-font-size:              $font-size-base * 1.25 !default;
+$lead-font-weight:            300 !default;
+
+$small-font-size:             80% !default;
+
+
+
+
+$body-font-family: 'Arial', sans-serif;
+
+// Color system
+
+$bt-white: #fff !default;
+$bt-gray-100: #f8f9fa !default;
+$bt-gray-200: #e9ecef !default;
+$bt-gray-300: #dee2e6 !default;
+$bt-gray-400: #ced4da !default;
+$bt-gray-500: #adb5bd !default;
+$bt-gray-600: #6c757d !default;
+$bt-gray-700: #495057 !default;
+$bt-gray-800: #343a40 !default;
+$bt-gray-900: #212529 !default;
+$bt-black: #000 !default;
+
+$bt-grays: () !default;
+$bt-grays: map-merge(
+  (
+    '100': $bt-gray-100,
+    '200': $bt-gray-200,
+    '300': $bt-gray-300,
+    '400': $bt-gray-400,
+    '500': $bt-gray-500,
+    '600': $bt-gray-600,
+    '700': $bt-gray-700,
+    '800': $bt-gray-800,
+    '900': $bt-gray-900,
+  ),
+  $bt-grays
+);
+
+$bt-blue: #007bff !default;
+$bt-indigo: #6610f2 !default;
+$bt-purple: #6f42c1 !default;
+$bt-pink: #e83e8c !default;
+$bt-red: #dc3545 !default;
+$bt-orange: #fd7e14 !default;
+$bt-yellow: #ffc107 !default;
+$bt-green: #28a745 !default;
+$bt-teal: #20c997 !default;
+$bt-cyan: #17a2b8 !default;
+
+$bt-colors: () !default;
+$bt-colors: map-merge(
+  (
+    'blue': $bt-blue,
+    'indigo': $bt-indigo,
+    'purple': $bt-purple,
+    'pink': $bt-pink,
+    'red': $bt-red,
+    'orange': $bt-orange,
+    'yellow': $bt-yellow,
+    'green': $bt-green,
+    'teal': $bt-teal,
+    'cyan': $bt-cyan,
+    'white': $bt-white,
+    'gray': $bt-gray-600,
+    'gray-dark': $bt-gray-800,
+  ),
+  $bt-colors
+);
+
+$bt-primary: $bt-blue !default;
+$bt-secondary: $bt-gray-600 !default;
+$bt-success: $bt-green !default;
+$bt-info: $bt-cyan !default;
+$bt-warning: $bt-yellow !default;
+$bt-danger: $bt-red !default;
+$bt-light: $bt-gray-100 !default;
+$bt-dark: $bt-gray-800 !default;
+
+//
+// $bt-spacer: 1rem !default;
+$bt-spacers: () !default;
+$bt-spacers: map-merge(
+  (
+    0: 0,
+    1: (
+      $bt-spacer * 0.25,
+    ),
+    2: (
+      $bt-spacer * 0.5,
+    ),
+    3: $bt-spacer,
+    4: (
+      $bt-spacer * 1.5,
+    ),
+    5: (
+      $bt-spacer * 3,
+    ),
+  ),
+  $bt-spacers
+);
+//
+
+$font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
+$font-size-lg: $font-size-base * 1.25 !default;
+$font-size-sm: $font-size-base * 0.875 !default;
+
+$font-weight-lighter: lighter !default;
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-bold: 700 !default;
+$font-weight-bolder: bolder !default;
+
+$font-weight-base: $font-weight-normal !default;
+$line-height-base: 1.5 !default;
+
+$h1-font-size: $font-size-base * 2.5 !default;
+$h2-font-size: $font-size-base * 2 !default;
+$h3-font-size: $font-size-base * 1.75 !default;
+$h4-font-size: $font-size-base * 1.5 !default;
+$h5-font-size: $font-size-base * 1.25 !default;
+$h6-font-size: $font-size-base !default;
+
+$headings-margin-bottom: $spacer / 2 !default;
+$headings-font-family: null !default;
+$headings-font-weight: 500 !default;
+$headings-line-height: 1.2 !default;
+$headings-color: null !default;
+
+$display1-size: 6rem !default;
+$display2-size: 5.5rem !default;
+$display3-size: 4.5rem !default;
+$display4-size: 3.5rem !default;
+
+$display1-weight: 300 !default;
+$display2-weight: 300 !default;
+$display3-weight: 300 !default;
+$display4-weight: 300 !default;
+$display-line-height: $headings-line-height !default;
+
+$lead-font-size: $font-size-base * 1.25 !default;
+$lead-font-weight: 300 !default;
+
+$small-font-size: 80% !default;
